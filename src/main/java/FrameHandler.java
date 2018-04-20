@@ -10,9 +10,9 @@ import java.util.Locale;
 /**
  * Echoes uppercase content of text frames.
  */
-public class WebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketFrameHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(FrameHandler.class);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {

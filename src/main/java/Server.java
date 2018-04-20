@@ -13,7 +13,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class Server {
 
-    private int port;
+    private final int port;
 
     public Server(int port) {
         this.port = port;
@@ -27,7 +27,7 @@ public class Server {
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
             b.handler(new LoggingHandler(LogLevel.INFO));
-            b.childHandler(new WebSocketServerInitializer(null));
+            b.childHandler(new ServerInitializer(null));
 
             // Bind and start to accept incoming connections.
             ChannelFuture f = b.bind(port).sync(); // (7)
