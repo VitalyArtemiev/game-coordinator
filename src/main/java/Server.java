@@ -1,3 +1,5 @@
+//package ru.mirea.game-coordinator;
+
 import io.netty.bootstrap.ServerBootstrap;
 
 import io.netty.channel.ChannelFuture;
@@ -37,6 +39,9 @@ public class Server {
             // In this example, this does not happen, but you can do that to gracefully
             // shut down your server.
             f.channel().closeFuture().sync();
+
+
+
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();

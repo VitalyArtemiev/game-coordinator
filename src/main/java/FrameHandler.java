@@ -19,10 +19,28 @@ public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
         // ping and pong frames already handled
 
         if (frame instanceof TextWebSocketFrame) {
+
+
             // Send the uppercase string back.
             String request = ((TextWebSocketFrame) frame).text();
             logger.info("{} received {}", ctx.channel(), request);
-            ctx.channel().writeAndFlush(new TextWebSocketFrame(request.toUpperCase(Locale.US)));
+            String response = "";
+            switch (request) {
+                case "getRoomList\n": {
+                    response = "roomList\n4\n";
+                    response += "1 room1 2 8\n";
+                    response += "2 room2 3 10\n";
+                    response += "3 room3 5 6\n";
+                    response += "4 room4 1 4\n";
+                    break;
+                }
+                default: {
+                    response = "Command not supported: '" + request + '\'';
+                }
+            }
+
+            ctx.channel().writeAndFlush(new TextWebSocketFrame(response));
+
         } else {
             String message = "unsupported frame type: " + frame.getClass().getName();
             throw new UnsupportedOperationException(message);
