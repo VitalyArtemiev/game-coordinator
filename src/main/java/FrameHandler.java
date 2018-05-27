@@ -1,15 +1,11 @@
-import java.util.Locale;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-        import io.netty.channel.ChannelHandlerContext;
-        import io.netty.channel.SimpleChannelInboundHandler;
-        import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-        import io.netty.handler.codec.http.websocketx.WebSocketFrame;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
-
-/**
- * Echoes uppercase content of text frames.
- */
 public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
     private static final Logger logger = LoggerFactory.getLogger(FrameHandler.class);
@@ -18,9 +14,9 @@ public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
         // ping and pong frames already handled
 
+        Channel ch = ctx.channel();
+
         if (frame instanceof TextWebSocketFrame) {
-
-
             // Send the uppercase string back.
             String request = ((TextWebSocketFrame) frame).text();
             logger.info("{} received {}", ctx.channel(), request);
@@ -34,6 +30,15 @@ public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
                     response += "4 room4 1 4\n";
                     break;
                 }
+                case "close": {
+                    ch.close();
+                    //ch.
+                    break;
+                }
+                case "shutdown": {
+                    ch.parent().close();
+                    break;
+                }
                 default: {
                     response = "Command not supported: '" + request + '\'';
                 }
@@ -43,6 +48,7 @@ public class FrameHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
         } else {
             String message = "unsupported frame type: " + frame.getClass().getName();
+            logger.error("Unsupported frame type");
             throw new UnsupportedOperationException(message);
         }
     }
