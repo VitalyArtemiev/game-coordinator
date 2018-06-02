@@ -9,6 +9,30 @@ repositories {
     mavenCentral()
 }
 
+plugins {
+    id 'org.hidetake.ssh' version 'x.y.z'
+}
+
+remotes {
+    webServer {
+        host = '80.240.212.66'
+        port = 1945
+        user = 'jenkins'
+        password = rootProject.file('pswd.txt').text.trim()
+    }
+}
+
+task deploy {
+    doLast {
+        ssh.run {
+            session(remotes.webServer) {
+                put from: 'example.war', into: '/webapps'
+                execute 'sudo service tomcat restart'
+            }
+        }
+    }
+}
+
 sourceSets {
     integrationTest {
         java.srcDir file('src/integrationTest/java')

@@ -24,6 +24,8 @@ public class Server {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
+    public Database db;
+
     public void run() throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup(MAX_BOSS_THREAD_COUNT);
         EventLoopGroup workerGroup = new NioEventLoopGroup(MAX_WORKER_THREAD_COUNT);
@@ -32,10 +34,12 @@ public class Server {
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
             b.handler(new LoggingHandler(LogLevel.INFO));
-            b.childHandler(new ServerInitializer(null));
+            b.childHandler(new ServerInitializer(null, db));
 
             // Bind and start to accept incoming connections.
             ChannelFuture f = b.bind(port).sync(); // (7)
+
+            db = new Database("");
 
             logger.info("Started on port {}", port);
             // Wait until the server socket is closed.
@@ -46,6 +50,7 @@ public class Server {
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
+            db.shutdown();
             logger.info("Shutting down");
         }
     }

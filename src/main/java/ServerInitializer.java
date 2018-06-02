@@ -14,9 +14,11 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
     private static final String WEBSOCKET_PATH = "/websocket";
 
     private final SslContext sslCtx;
+    private final Database db;
 
-    public ServerInitializer(SslContext sslCtx) {
+    public ServerInitializer(SslContext sslCtx, Database db) {
         this.sslCtx = sslCtx;
+        this.db = db;
     }
 
     @Override
@@ -30,6 +32,6 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new WebSocketServerCompressionHandler());
         pipeline.addLast(new WebSocketServerProtocolHandler(WEBSOCKET_PATH, null, true));
         pipeline.addLast(new IndexPageHandler(WEBSOCKET_PATH));
-        pipeline.addLast(new FrameHandler());
+        pipeline.addLast(new FrameHandler(db));
     }
 }
