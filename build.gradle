@@ -1,33 +1,46 @@
+plugins {
+    id 'org.hidetake.ssh' version '2.9.0'
+}
+
 group 'com'
-version '1.0-SNAPSHOT'
+version '1.1-SNAPSHOT'
 
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+
 repositories {
     mavenCentral()
 }
 
-plugins {
-    id 'org.hidetake.ssh' version 'x.y.z'
+jar {
+    manifest {
+        attributes 'Main-Class' : 'Server'
+    }
 }
 
 remotes {
     webServer {
         host = '80.240.212.66'
         port = 1945
-        user = 'jenkins'
+        user = rootProject.file('usr.txt').text.trim()
         password = rootProject.file('pswd.txt').text.trim()
     }
 }
 
 task deploy {
+    dependsOn jar
+
     doLast {
+        ssh.settings {
+            knownHosts = allowAnyHosts
+        }
+
         ssh.run {
             session(remotes.webServer) {
-                put from: 'example.war', into: '/webapps'
-                execute 'sudo service tomcat restart'
+                put from: '//home/vitaly/IdeaProjects/game-coordinator/build/libs/game-coordinator-' + version + '.jar', into: '/home/vitalyartemiev/coordinator'
+                //execute 'sudo service tomcat restart'
             }
         }
     }
