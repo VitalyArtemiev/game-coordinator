@@ -30,6 +30,8 @@ public class Server {
         EventLoopGroup bossGroup = new NioEventLoopGroup(MAX_BOSS_THREAD_COUNT);
         EventLoopGroup workerGroup = new NioEventLoopGroup(MAX_WORKER_THREAD_COUNT);
         try {
+            db = new Database("");
+
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
@@ -38,8 +40,6 @@ public class Server {
 
             // Bind and start to accept incoming connections.
             ChannelFuture f = b.bind(port).sync(); // (7)
-
-            db = new Database("");
 
             logger.info("Started on port {}", port);
             // Wait until the server socket is closed.

@@ -22,10 +22,10 @@ jar {
 
 remotes {
     webServer {
-        host = '80.240.212.66'
-        port = 1945
-        user = rootProject.file('usr.txt').text.trim()
-        password = rootProject.file('pswd.txt').text.trim()
+        host =     rootProject.file('webserver.txt').text.readLines().get(0)
+        port =     rootProject.file('webserver.txt').text.readLines().get(1) as int
+        user =     rootProject.file('webserver.txt').text.readLines().get(2)
+        password = rootProject.file('webserver.txt').text.readLines().get(3)
     }
 }
 
@@ -63,6 +63,8 @@ task integrationTest(type: Test) {
 }
 
 task e2eTest(type: Test) {
+    dependsOn deploy
+
     testClassesDir = sourceSets.e2eTest.output.classesDir
     classpath = sourceSets.e2eTest.runtimeClasspath
 }

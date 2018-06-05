@@ -1,0 +1,56 @@
+/*{
+  "message": {
+    "request" : "register",
+    "name" : "newplayer1"
+  }
+}
+
+{
+  "message": {
+    "request" : "roomList",
+    "id": 0
+  }
+}
+
+{
+  "message": {
+    "request" : "enterRoom",
+    "id": 0,
+    "roomId" : 2
+  }
+}
+
+{
+  "message": {
+    "request" : "exitRoom",
+    "id": 0,
+    "roomId" : 2
+  }
+}
+
+{
+  "message": {
+    "request" : "newRoom",
+    "roomName" : "firstroom",
+    "playerLimit":  8,
+    "id" : 0
+  }
+}
+
+
+
+*/
+
+{
+  "message": {
+    "response" : {
+      "task" : "roomList",
+      "room" : [
+        {"id" : 1, "name" : "room1", "pcount" : 2, "pmax" : 8},
+        {"id" : 2, "name" : "room2", "pcount" : 3, "pmax" : 5},
+        {"id" : 20, "name" : "room20", "pcount" : 4, "pmax" : 6}
+      ]
+    }
+
+  }
+}
