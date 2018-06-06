@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com'
-version '1.1-SNAPSHOT'
+version '1.2'
 
 apply plugin: 'java'
 
@@ -15,6 +15,10 @@ repositories {
 }
 
 jar {
+    doFirst {
+        from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+
     manifest {
         attributes 'Main-Class' : 'Server'
     }
@@ -40,7 +44,7 @@ task deploy {
         ssh.run {
             session(remotes.webServer) {
                 put from: '//home/vitaly/IdeaProjects/game-coordinator/build/libs/game-coordinator-' + version + '.jar', into: '/home/vitalyartemiev/coordinator'
-                //execute 'sudo service tomcat restart'
+                execute 'nohup java -jar ' + '~/coordinator/game-coordinator-' + version + '.jar 8081 < /dev/null > /dev/null 2> /dev/null &'
             }
         }
     }
@@ -77,4 +81,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+    e2eTestCompile group: 'junit', name: 'junit', version: '4.12'
+    e2eTestCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.41.0'
+
 }

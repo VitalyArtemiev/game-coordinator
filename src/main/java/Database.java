@@ -46,7 +46,7 @@ class Room {
 
     public boolean removePlayer(long id) {
         if (players.contains(id)) {
-            players.remove(id);
+            players.remove(Long.valueOf(id));
             return true;
         }
         return false;
@@ -333,8 +333,6 @@ public class Database {
             DBFileName = filename;
         }
 
-        DBFileName = "examplebd.json"; //todo: remove
-
         players = new ArrayList<>();
         rooms = new ArrayList<>();
 
@@ -378,29 +376,34 @@ public class Database {
     }
 
     private void load() throws IOException {
-        byte[] jsonData = Files.readAllBytes(Paths.get(DBFileName));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        JsonNode rootNode = objectMapper.readTree(jsonData);
-        JsonNode playersNode = rootNode.path("PlayerDB").path("player");
-        if (playersNode.isArray()) {
-            for (final JsonNode pNode: playersNode) {
-                Player p = new Player(pNode.get("name").asText("error"), pNode.get("id").asLong(-1));
-                players.add(p);
-            }
-        }
-
         long maxid = 0;
+        try {
+            byte[] jsonData = Files.readAllBytes(Paths.get(DBFileName));
 
-        for (Player p : players) {
-            if (p.ID > maxid) {
-                maxid = p.ID;
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+            JsonNode playersNode = rootNode.path("PlayerDB").path("player");
+            if (playersNode.isArray()) {
+                for (final JsonNode pNode : playersNode) {
+                    Player p = new Player(pNode.get("name").asText("error"), pNode.get("id").asLong(-1));
+                    players.add(p);
+                }
+            }
+
+
+
+            for (Player p : players) {
+                if (p.ID > maxid) {
+                    maxid = p.ID;
+                }
             }
         }
+        finally {
 
-        lastPlayerId = new AtomicLong(maxid);
-        lastRoomId = new AtomicLong(1);
+            lastPlayerId = new AtomicLong(maxid);
+            lastRoomId = new AtomicLong(1);
+        }
     }
 
     AtomicLong lastRoomId;

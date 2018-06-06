@@ -51,10 +51,10 @@ public final class ServerIndexPage {
                         "</script>" + NEWLINE +
                         "<form onsubmit=\"return false;\">" + NEWLINE +
                         "<input type=\"text\" name=\"message\" value=\"Hello, World!\"/>" +
-                        "<input type=\"button\" value=\"Send Web Socket Data\"" + NEWLINE +
+                        "<input type=\"button\" name=\"button\" value=\"Send Web Socket Data\"" + NEWLINE +
                         "       onclick=\"send(this.form.message.value)\" />" + NEWLINE +
                         "<h3>Output</h3>" + NEWLINE +
-                        "<textarea id=\"responseText\" style=\"width:500px;height:300px;\"></textarea>" + NEWLINE +
+                        "<textarea id=\"responseText\" value=\"defaultvalue\" style=\"width:500px;height:300px;\"></textarea>" + NEWLINE +
                         "</form>" + NEWLINE +
                         "</body>" + NEWLINE +
                         "</html>" + NEWLINE, CharsetUtil.US_ASCII);

@@ -37,6 +37,12 @@
   }
 }
 
+{
+  "message": {
+    "request" : "shutdown"
+  }
+}
+
 
 
 */
@@ -46,9 +52,9 @@
     "response" : {
       "task" : "roomList",
       "room" : [
-        {"id" : 1, "name" : "room1", "pcount" : 2, "pmax" : 8},
-        {"id" : 2, "name" : "room2", "pcount" : 3, "pmax" : 5},
-        {"id" : 20, "name" : "room20", "pcount" : 4, "pmax" : 6}
+        {"id" : 1, "name" : "room1", "playerCount" : 2, "playerLimit" : 8},
+        {"id" : 2, "name" : "room2", "playerCount" : 3, "playerLimit" : 5},
+        {"id" : 20, "name" : "room20", "playerCount" : 4, "playerLimit" : 6}
       ]
     }
 
