@@ -21,6 +21,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         this.db = db;
     }
 
+    // setting up rules for entering events (over http)
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();

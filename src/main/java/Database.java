@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
+import javax.print.DocFlavor;
+import javax.xml.bind.annotation.XmlType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -59,7 +61,7 @@ class Room {
     ArrayList<Long> players;
 }
 
-enum TaskType {tInvalid, tRegister, tRoomList, tNewRoom, tEnter, tLeave, tParse}
+enum TaskType {tInvalid, tRegister, tRoomList, tNewRoom, tEnter, tLeave, tParse, tMessage}
 
 class DBTask {
     private static final String MESSAGE_TASK_FAIL = "fail";
@@ -69,6 +71,7 @@ class DBTask {
     private static final String MESSAGE_ROOM_EXIT = "exitRoom";
     private static final String MESSAGE_ROOM_CREATE = "newRoom";
     private static final String MESSAGE_ROOMLIST = "roomList";
+    private static final String MESSAGE_SEND_TO = "communicate";
 
     private static final String STRING_NOT_FOUND = "error: no string";
     private static final String STRING_DEFAULT = "string not needed";
@@ -79,6 +82,7 @@ class DBTask {
     String input;
     Channel ch;
     Player p;
+    Player rp;
     Room r;
 
     DBTask(Channel ch, String input) {
@@ -95,6 +99,10 @@ class DBTask {
         ObjectNode responseNode = objectMapper.createObjectNode();
 
         switch (t) {
+            case tMessage: {
+                // TODO: add response later
+                break;
+            }
             case tRegister: {
                 responseNode.put("task", MESSAGE_REGISTER);
                 responseNode.put("id", (long) response);
@@ -164,6 +172,14 @@ class DBTask {
         String request = message.path("request").asText(STRING_NOT_FOUND);
 
         switch (request) {
+            // messages client-to-client
+            case MESSAGE_SEND_TO: {
+                t = TaskType.tMessage;
+                p = new Player(STRING_DEFAULT, message.path("sender").asLong(INT_NOT_FOUND));
+                rp = new Player(STRING_DEFAULT, message.path("reciever").asLong(INT_NOT_FOUND));
+                r = new Room(message.path("roomId").asLong(INT_NOT_FOUND), STRING_DEFAULT, INT_DEFAULT);
+                break;
+            }
             case MESSAGE_REGISTER: {
                 t = TaskType.tRegister;
                 p = new Player(message.path("name").asText(STRING_NOT_FOUND), INT_DEFAULT);

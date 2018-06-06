@@ -32,9 +32,13 @@ public class Server {
         try {
             db = new Database("");
 
+            // starting the server
             ServerBootstrap b = new ServerBootstrap();
+            // setting up EventLoopGroups
             b.group(bossGroup, workerGroup);
+            // other tecnical complicated stuff
             b.channel(NioServerSocketChannel.class);
+            // setting handlers
             b.handler(new LoggingHandler(LogLevel.INFO));
             b.childHandler(new ServerInitializer(null, db));
 
