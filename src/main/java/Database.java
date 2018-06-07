@@ -100,11 +100,16 @@ class DBTask {
         ObjectNode rootNode = objectMapper.createObjectNode();
         ObjectNode message = objectMapper.createObjectNode();
         ObjectNode responseNode = objectMapper.createObjectNode();
-
+        int i = 0;
         switch (t) {
             case tCollectMessages: {
                 // TODO: return all needed messages
-                
+                for (Message a: (List<Message>) response)
+                {
+                    ObjectNode p = responseNode.putObject("" + i);
+                    p.put("message", a.getMessage());
+                }
+                i++;
                 break;
             }
             case tMessage: {
@@ -184,7 +189,7 @@ class DBTask {
             case MESSAGE_COLLECT_MESSAGES: {
                 // TODO: add a bit of parsing
                 t = TaskType.tCollectMessages;
-                p = new Player(message.path("name").asText(STRING_NOT_FOUND), INT_DEFAULT);
+                p = new Player(STRING_DEFAULT, message.path("id").asLong(INT_NOT_FOUND));
                 r = new Room(message.path("roomId").asLong(INT_NOT_FOUND), STRING_DEFAULT, INT_DEFAULT);
                 break;
             }
@@ -347,7 +352,7 @@ public class Database {
                         }
                         case tCollectMessages: {
                             // TODO: add proper actions
-                            List<Message> messageList = MessagingDB.findMessages((long) task.p.ID);
+                            List<Message> messageList = MessagingDB.findMessages(task.p.ID, task.r.ID);
                             if (messageList != null)
                                 task.respond(true, messageList);
                             else
