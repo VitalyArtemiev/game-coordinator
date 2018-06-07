@@ -11,7 +11,15 @@ public class MessagingDB {
             if (a.getTo() == to && a.getRoom() == room)
             {
                 returnList.add(a);
-                queue.remove(a);
+            }
+        }
+        for (int i = 0, j = 0; i < queue.size(); i++)
+        {
+            if (queue.get(i).getRoom() == returnList.get(j).getRoom() &&
+                    queue.get(i).getTo() == returnList.get(j).getTo())
+            {
+                queue.remove(i);
+                j++;
             }
         }
         return returnList;
