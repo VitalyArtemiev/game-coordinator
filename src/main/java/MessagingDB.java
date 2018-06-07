@@ -1,11 +1,10 @@
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessagingDB {
     static private volatile List<Message> queue = new ArrayList();
 
-    static public /* just in case */  synchronized /* just in case */ List<Message> findMessages(int to)
+    static public /* just in case */  synchronized /* just in case */ List<Message> findMessages(long to)
     {
         List<Message> returnList = new ArrayList();
         for (Message a: queue) {

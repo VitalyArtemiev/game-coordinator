@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.List;
 
 
 class Player {
@@ -103,6 +104,7 @@ class DBTask {
         switch (t) {
             case tCollectMessages: {
                 // TODO: return all needed messages
+                
                 break;
             }
             case tMessage: {
@@ -181,6 +183,9 @@ class DBTask {
         switch (request) {
             case MESSAGE_COLLECT_MESSAGES: {
                 // TODO: add a bit of parsing
+                t = TaskType.tCollectMessages;
+                p = new Player(message.path("name").asText(STRING_NOT_FOUND), INT_DEFAULT);
+                r = new Room(message.path("roomId").asLong(INT_NOT_FOUND), STRING_DEFAULT, INT_DEFAULT);
                 break;
             }
             // messages client-to-client
@@ -342,6 +347,11 @@ public class Database {
                         }
                         case tCollectMessages: {
                             // TODO: add proper actions
+                            List<Message> messageList = MessagingDB.findMessages((long) task.p.ID);
+                            if (messageList != null)
+                                task.respond(true, messageList);
+                            else
+                                task.respond(false, null);
                         }
                         default: {
 
