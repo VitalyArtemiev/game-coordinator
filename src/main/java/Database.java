@@ -84,6 +84,7 @@ class DBTask {
     Player p;
     Player rp;
     Room r;
+    String commMessage;
 
     DBTask(Channel ch, String input) {
         t = TaskType.tParse;
@@ -100,7 +101,8 @@ class DBTask {
 
         switch (t) {
             case tMessage: {
-                // TODO: add response later
+                responseNode.put("status", "message is added");
+                responseNode.put("message", (String) response);
                 break;
             }
             case tRegister: {
@@ -194,6 +196,7 @@ class DBTask {
                 t = TaskType.tNewRoom;
                 p = new Player(STRING_DEFAULT, message.path("id").asLong(INT_NOT_FOUND));
                 r = new Room(INT_DEFAULT, message.path("roomName").asText(STRING_NOT_FOUND), message.path("playerLimit").asInt(INT_NOT_FOUND));
+                commMessage = message.path("commMessage").asText(STRING_NOT_FOUND);
                 break;
             }
             case MESSAGE_ROOM_ENTER: {
@@ -320,6 +323,10 @@ public class Database {
                         case tInvalid: {
                             task.respond(false, "invalid");
                             break;
+                        }
+                        case tMessage: {
+                            // TODO: add proper actions
+                            task.respond(true, task.commMessage);
                         }
                         default: {
 

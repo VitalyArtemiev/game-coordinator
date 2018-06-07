@@ -43,10 +43,16 @@
   }
 }
 
-
-
+{
+  "message": {
+    "request" : "communicate",
+    "sender": 0,
+    "reciever": 1,
+    "roomId": 1,
+    "commMessage": "SomeWords"
+  }
+}
 */
-
 {
   "message": {
     "response" : {
