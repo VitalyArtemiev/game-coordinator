@@ -180,6 +180,7 @@ class DBTask {
                 p = new Player(STRING_DEFAULT, message.path("sender").asLong(INT_NOT_FOUND));
                 rp = new Player(STRING_DEFAULT, message.path("reciever").asLong(INT_NOT_FOUND));
                 r = new Room(message.path("roomId").asLong(INT_NOT_FOUND), STRING_DEFAULT, INT_DEFAULT);
+                commMessage = message.path("commMessage").asText(STRING_NOT_FOUND);
                 break;
             }
             case MESSAGE_REGISTER: {
@@ -196,7 +197,6 @@ class DBTask {
                 t = TaskType.tNewRoom;
                 p = new Player(STRING_DEFAULT, message.path("id").asLong(INT_NOT_FOUND));
                 r = new Room(INT_DEFAULT, message.path("roomName").asText(STRING_NOT_FOUND), message.path("playerLimit").asInt(INT_NOT_FOUND));
-                commMessage = message.path("commMessage").asText(STRING_NOT_FOUND);
                 break;
             }
             case MESSAGE_ROOM_ENTER: {
