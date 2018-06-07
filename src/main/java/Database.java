@@ -61,7 +61,7 @@ class Room {
     ArrayList<Long> players;
 }
 
-enum TaskType {tInvalid, tRegister, tRoomList, tNewRoom, tEnter, tLeave, tParse, tMessage}
+enum TaskType {tInvalid, tRegister, tRoomList, tNewRoom, tEnter, tLeave, tParse, tMessage, tCollectMessages}
 
 class DBTask {
     private static final String MESSAGE_TASK_FAIL = "fail";
@@ -72,6 +72,7 @@ class DBTask {
     private static final String MESSAGE_ROOM_CREATE = "newRoom";
     private static final String MESSAGE_ROOMLIST = "roomList";
     private static final String MESSAGE_SEND_TO = "communicate";
+    private static final String MESSAGE_COLLECT_MESSAGES = "collect";
 
     private static final String STRING_NOT_FOUND = "error: no string";
     private static final String STRING_DEFAULT = "string not needed";
@@ -100,6 +101,10 @@ class DBTask {
         ObjectNode responseNode = objectMapper.createObjectNode();
 
         switch (t) {
+            case tCollectMessages: {
+                // TODO: return all needed messages
+                break;
+            }
             case tMessage: {
                 responseNode.put("status", "message is added");
                 responseNode.put("message", (String) response);
@@ -174,6 +179,10 @@ class DBTask {
         String request = message.path("request").asText(STRING_NOT_FOUND);
 
         switch (request) {
+            case MESSAGE_COLLECT_MESSAGES: {
+                // TODO: add a bit of parsing
+                break;
+            }
             // messages client-to-client
             case MESSAGE_SEND_TO: {
                 t = TaskType.tMessage;
@@ -329,6 +338,10 @@ public class Database {
                             Message mg = new Message(task.p.ID, task.rp.ID, task.r.ID, task.commMessage);
                             MessagingDB.addElement(mg);
                             task.respond(true, task.commMessage);
+                            break;
+                        }
+                        case tCollectMessages: {
+                            // TODO: add proper actions
                         }
                         default: {
 

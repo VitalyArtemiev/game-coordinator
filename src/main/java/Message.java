@@ -40,9 +40,6 @@ public class Message {
 
     private long from;
     private long to;
-
-
-
     private long room;
     private String message;
 }
