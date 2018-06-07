@@ -326,6 +326,8 @@ public class Database {
                         }
                         case tMessage: {
                             // TODO: add proper actions
+                            Message mg = new Message(task.p.ID, task.rp.ID, task.r.ID, task.commMessage);
+                            MessagingDB.addElement(mg);
                             task.respond(true, task.commMessage);
                         }
                         default: {
